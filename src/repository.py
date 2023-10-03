@@ -1,6 +1,5 @@
-import csv
 import sqlite3
-import patient_functions
+from patient import Patient
 
 class Repository:
   database_name = ""
@@ -55,21 +54,12 @@ class Repository:
         #Check in case of heading row
         if "weight" in row or len(row) == 0:
           continue
-        patient = patient_functions.format_patient(row)
+        patient = Patient(row)
         try:
-          if(len(patient) == 5): 
-            params = (patient[0], patient[1], patient[2], patient[3], patient[4])
-            cursor.execute(f"INSERT INTO {self.tableName} VALUES (?, ?, ?, ?, ?);", params)
-          else:
-            params = (patient[0], patient[1], patient[2], patient[3])
-            cursor.execute(f"INSERT INTO {self.tableName} (Patientnumber, arrivaldate, ward, weight) VALUES (?, ?, ?, ?);", params)
+          cursor.execute(f"INSERT INTO {self.tableName} VALUES (?, ?, ?, ?, ?);", patient.to_tuple())
         except sqlite3.IntegrityError:
-          if(len(patient) == 5): 
-            params = (patient[2], patient[3], patient[4], patient[0])
-            cursor.execute(f"UPDATE {self.tableName} SET releasedate=?, ward=?, weight=? WHERE Patientnumber=?;", (params))
-          else:
-            params = (patient[2], patient[3], patient[0])
-            cursor.execute(f"UPDATE {self.tableName} SET ward=?, weight=? WHERE Patientnumber=?;", (params))
+          params = (patient.release_date, patient.ward, patient.weight, patient.patient_number)
+          cursor.execute(f"UPDATE {self.tableName} SET releasedate=?, ward=?, weight=? WHERE Patientnumber=?;", (params))
         finally:
           self.db_conn.commit()
 
