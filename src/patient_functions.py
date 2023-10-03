@@ -14,3 +14,5 @@ def format_patient(patient_string):
         if index == 1 or (index == 2 and re.match(r"\d{1,2}.\d{1,2}.\d{4}", patient[index])):
             patient[index] = get_date(element)
     return patient
+
+#TODO: Into class structure

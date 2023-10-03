@@ -1,7 +1,6 @@
 import csv
 import sqlite3
-import patientFunctions
-import datetime
+import patient_functions
 
 class Repository:
   database_name = ""
@@ -56,7 +55,7 @@ class Repository:
         #Check in case of heading row
         if "weight" in row or len(row) == 0:
           continue
-        patient = patientFunctions.format_patient(row)
+        patient = patient_functions.format_patient(row)
         try:
           if(len(patient) == 5): 
             params = (patient[0], patient[1], patient[2], patient[3], patient[4])

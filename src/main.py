@@ -1,24 +1,22 @@
 import sys
 
-import sourceReader
-import db
+import source_reader as source_reader
+import repository as repository
+import argument_parser as ap
 
 def main():
+  a_parser = ap.ArgumentParser()
+  args = a_parser.parser.parse_args()
   try:
-    patientStream = sys.argv[1]
-    databaseName = sys.argv[2]
-    tableName = sys.argv[3]
-    repository = db.Repository(databaseName, tableName)
-    if not repository.is_database_initialized():
-      repository.initialize_patient_database()
-    contentArr = sourceReader.string_to_array(patientStream)
-    repository.save_to_database(contentArr)
-  except IndexError:
-    print("Three arguments are needed: source of the string stream, database name and table name!")
+    repo = repository.Repository(args.database_name, args.table_name)
+    if not repo.is_database_initialized():
+      repo.initialize_patient_database()
+    contentArr = source_reader.string_to_array(args.file_name)
+    repo.save_to_database(contentArr)
   except FileNotFoundError:
-    print("Check file name!")
+    print("Check source file name!")
   finally:
-    repository.close_database_connection()
+    repo.close_database_connection()
 
 
 if __name__ == "__main__":
