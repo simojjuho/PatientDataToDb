@@ -1,10 +1,11 @@
-import sys
+import logging
 
 import source_reader as source_reader
 import repository as repository
 import argument_parser as ap
 
 def main():
+  logger = logging
   a_parser = ap.ArgumentParser()
   args = a_parser.parser.parse_args()
   try:

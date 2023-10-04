@@ -1,11 +1,11 @@
 import datetime
-from patient import Patient
+from src import patient as pa
 
 
 class Test_Patient:
   patient_row_release = "1151925,12.3.2006,17.3.2006,EP,76.3"
   patient_row_no_release = "9442583,20.6.2006,,EP,53.8"
-  patient = Patient(patient_row_release)
+  patient = pa.Patient(patient_row_release)
 
   def test_format_patient_length_release(self):
     assert len(self.patient.format_patient(self.patient_row_release)) == 5

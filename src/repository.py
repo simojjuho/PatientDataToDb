@@ -1,5 +1,5 @@
 import sqlite3
-from patient import Patient
+from src.patient import Patient
 
 class Repository:
   database_name = ""
@@ -51,7 +51,7 @@ class Repository:
   def save_to_database(self, databaseRows):
     cursor = self.check_database_connection()
     for row in databaseRows:
-        #Check in case of heading row
+        #Check in case of heading row or empty rows
         if "weight" in row or len(row) == 0:
           continue
         patient = Patient(row)
